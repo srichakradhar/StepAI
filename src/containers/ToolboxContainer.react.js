@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const getToolboxContent = (state: StateType) => {
+  console.log(state);
   if (state.stepper_state === StepperState.VISUALIZE) {
     switch (state.model) {
       case Models.LINEAR_REGRESSION:
@@ -66,6 +67,7 @@ const getToolboxContent = (state: StateType) => {
 export default function ToolboxContainer({ getIsShown }) {
   const classes = useStyles();
   const { state } = useState();
+  console.log("Get is shown", getIsShown());
   return (
     <Grow in={getIsShown()}>
       <div
@@ -88,7 +90,7 @@ export default function ToolboxContainer({ getIsShown }) {
             : state.stepper_state === StepperState.DATASET &&
               state.sample_dataset != null
             ? "Dataset Preview - " + datasetMetadata[state.sample_dataset].title
-            : null}
+            : "Test"}
         </Typography>
         <Card className={classes.card} variant="outlined">
           <CardContent className={classes.cardContent}>

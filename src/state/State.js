@@ -86,10 +86,13 @@ function reducer(state: StateType, action: ActionType): StateType {
         // dataset_category: null,
       };
     case Actions.SET_DATASET_CATEGORY: {
+      console.log(action);
+      console.log(state);
       const newState = { ...state, dataset_category: action.dataset_category };
       if (action.dataset_category === DatasetCategory.CUSTOM) {
         newState.sample_dataset = null;
       }
+      console.log(newState);
       return newState;
     }
     case Actions.SET_MODEL:
@@ -129,7 +132,9 @@ function reducer(state: StateType, action: ActionType): StateType {
     }
     case Actions.SET_SAMPLE_DATASET:
       const dataInfo = datasetMetadata[action.sample_dataset];
+      console.log(dataInfo);
       if (dataInfo.model.constructor === Array) {
+        console.log(action);
         return {
           ...state,
           sample_dataset: action.sample_dataset,
@@ -137,6 +142,7 @@ function reducer(state: StateType, action: ActionType): StateType {
           nlp_models_otto: dataInfo.model,
         };
       }
+      console.log(action);
       return {
         ...state,
         sample_dataset: action.sample_dataset,

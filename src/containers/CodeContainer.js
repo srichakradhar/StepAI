@@ -11,8 +11,7 @@ import { useModelState } from "state/ModelState";
 function CodeContainer({ getIsShown }) {
   const { state } = useState();
   const { nn_state } = useNNState();
-  const {model_state} = useModelState();
-
+  const { model_state } = useModelState();
   return (
     <Grow in={getIsShown()}>
       <div

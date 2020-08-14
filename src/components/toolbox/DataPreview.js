@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 const chipData = (state: StateType) => {
   const metadata = datasetMetadata[state.sample_dataset];
+  console.log(metadata);
   const chips = ["Instances: " + String(metadata.instances)];
   if (metadata.attributes) {
     chips.push("Attributes: " + String(metadata.attributes));
@@ -91,6 +92,7 @@ export default function DataPreview() {
           {chipData(state).map((data, index) => {
             return (
               <li key={index}>
+                Test
                 <Chip label={data} color="primary" className={classes.chip} />
               </li>
             );

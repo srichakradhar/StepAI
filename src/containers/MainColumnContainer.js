@@ -14,7 +14,6 @@ function MainColumnContainer() {
     getActiveStep(state) > 1 && !state.stepper_finish;
   const getIsToolboxShown = () =>
     state.stepper_state === StepperState.DATASET &&
-    state.dataset_category === DatasetCategory.SAMPLE &&
     state.sample_dataset != null;
   return (
     <Grid container style={{ height: "100%" }}>

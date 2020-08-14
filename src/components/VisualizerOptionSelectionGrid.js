@@ -39,16 +39,19 @@ import clean from "art/clean.svg";
 
 function logoPicker(label) {
   const map = {
-    [Tasks.REGRESSION]: reg,
-    [Tasks.CLASSIFICATION]: clas,
-    [Tasks.NATURAL_LANGUAGE]: nlp,
-    [DatasetCategory.CUSTOM]: custom,
-    [DatasetCategory.SAMPLE]: sample,
+    [Tasks.TOPIC_MODELING]: reg,
+    [Tasks.CATEGORIES]: clas,
+    [Tasks.REPUTATION]: sentiment,
+    [Tasks.HEALTH_SAFETY]: nlp,
+    [DatasetCategory.STRUCTURED]: custom,
+    [DatasetCategory.UNSTRUCTURED]: sample,
+    [DatasetCategory.IMAGE]: entity,
     [Models.LINEAR_REGRESSION]: linear,
     [Models.POISSON_REGRESSION]: poisson,
     [Models.ORDINAL_REGRESSION]: ordinal,
     [Models.KNN]: knn,
     [Models.NEURAL_NETWORK_FF]: network,
+    [Models.ENCODER]: sentiment,
     [Models.SENTIMENT_ANALYSIS]: sentiment,
     [Models.ENTITY_RECOGNITION]: entity,
     [Preprocessors.PCA]: pca,
@@ -356,7 +359,7 @@ export default function VisualizerOptionSelectionGrid() {
           </Grid>
         ))}
         {state.stepper_state === StepperState.DATASET &&
-        state.dataset_category === DatasetCategory.SAMPLE ? (
+        state.dataset_category ? (
           <Grid item className={classes.datasetMenu}>
             <SampleDatasetMenu />
           </Grid>

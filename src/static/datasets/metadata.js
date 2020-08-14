@@ -3,12 +3,18 @@ import React from "react";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import DraftsIcon from "@material-ui/icons/Drafts";
 import SendIcon from "@material-ui/icons/Send";
-import TwitterIcon from '@material-ui/icons/Twitter';
-import FilterVintageRoundedIcon from '@material-ui/icons/FilterVintageRounded';
-import HouseRoundedIcon from '@material-ui/icons/HouseRounded';
-import LocalBarRoundedIcon from '@material-ui/icons/LocalBarRounded';
-import MovieFilterRoundedIcon from '@material-ui/icons/MovieFilterRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import TwitterIcon from "@material-ui/icons/Twitter";
+import FilterVintageRoundedIcon from "@material-ui/icons/FilterVintageRounded";
+import HouseRoundedIcon from "@material-ui/icons/HouseRounded";
+import LocalBarRoundedIcon from "@material-ui/icons/LocalBarRounded";
+import MovieFilterRoundedIcon from "@material-ui/icons/MovieFilterRounded";
+import FavoriteRoundedIcon from "@material-ui/icons/FavoriteRounded";
+
+import {
+  structuredColumns,
+  structuredColumnsMap,
+  structured,
+} from "static/datasets/structured";
 
 import {
   irisColumns,
@@ -43,40 +49,26 @@ import { imdb, imdbColumns, imdbColumnsMap } from "static/datasets/imdb";
 import { SampleDataset, Tasks, Models } from "state/StateTypes";
 
 export const datasetMetadata = {
-  [SampleDataset.IRIS]: {
-    title: "Iris",
-    subtitle: "The popular dataset featuring flower traits",
+  [SampleDataset.STRUCTURED]: {
+    title: "Structured",
+    subtitle: "Kansas City School District Dataset",
     icon: <FilterVintageRoundedIcon fontSize="small" />,
-    instances: 150,
-    attributes: 4,
-    classes: 3,
+    instances: 563,
+    attributes: 14,
+    classes: 2,
     tags: ["Numeric"],
-    columns: irisColumns,
-    columnsMap: irisColumnsMap,
-    data: iris,
-    units: irisUnits,
-
-    keywords: ["flower", "iris", "petal"],
-    task: Tasks.CLASSIFICATION,
-    model: Models.KNN,
-  },
-  [SampleDataset.WINE]: {
-    title: "Wine",
-    subtitle: "The popular dataset featuring flower traits",
-    icon: <LocalBarRoundedIcon fontSize="small" />,
-    instances: wine.length,
-    attributes: 13,
-    classes: 3,
-    tags: ["Numeric"],
-    columns: wineColumns,
-    columnsMap: wineColumnsMap,
-    data: wine,
+    columns: structuredColumns,
+    columnsMap: structuredColumnsMap,
+    data: structured,
     units: null,
 
-    keywords: ["wine", "alcohol", "chemical"],
-    task: Tasks.CLASSIFICATION,
+    keywords: ["structured", "schools"],
+    url:
+      "https://github.com/srichakradhar/Edu-KC/blob/master/School_District_List_as_of_4_17_13_csv.csv",
+    task: Tasks.TOPIC_MODELING,
     model: Models.KNN,
   },
+
   [SampleDataset.TWITTER]: {
     title: "Twitter",
     subtitle: "A small sample of random tweets",
@@ -88,10 +80,11 @@ export const datasetMetadata = {
     data: tweets,
     column: 1,
 
-    url: "https://raw.githubusercontent.com/KartikChugh/Otto/master/src/static/datasets/tweets.csv",
+    url:
+      "https://raw.githubusercontent.com/KartikChugh/Otto/master/src/static/datasets/tweets.csv",
 
     keywords: ["tweet", "twitter", "sentiment"],
-    task: Tasks.NATURAL_LANGUAGE,
+    task: Tasks.CATEGORIES,
     model: [Models.SENTIMENT_ANALYSIS, Models.ENTITY_RECOGNITION],
   },
   [SampleDataset.BOSTON]: {
@@ -108,7 +101,7 @@ export const datasetMetadata = {
     indVar: bostonDefaultIndVar,
 
     keywords: ["boston", "house", "housing", "home"],
-    task: Tasks.REGRESSION,
+    task: Tasks.CATEGORIES,
     model: Models.LINEAR_REGRESSION,
   },
   [SampleDataset.DIABETES]: {
@@ -125,7 +118,7 @@ export const datasetMetadata = {
     indVar: diabetesDefaultIndVar,
 
     keywords: ["diabetes", "disease", "progression", "health", "bmi"],
-    task: Tasks.REGRESSION,
+    task: Tasks.REPUTATION,
     model: Models.LINEAR_REGRESSION,
   },
   [SampleDataset.IMDB]: {
@@ -139,10 +132,11 @@ export const datasetMetadata = {
     data: imdb,
     column: 0,
 
-    url: "https://raw.githubusercontent.com/KartikChugh/Otto/master/src/static/datasets/imdb.csv",
+    url:
+      "https://raw.githubusercontent.com/KartikChugh/Otto/master/src/static/datasets/imdb.csv",
 
     keywords: ["imdb", "movies", "sentiment", "reviews"],
-    task: Tasks.NATURAL_LANGUAGE,
+    task: Tasks.HEALTH_SAFETY,
     model: [Models.SENTIMENT_ANALYSIS, Models.ENTITY_RECOGNITION],
   },
 };

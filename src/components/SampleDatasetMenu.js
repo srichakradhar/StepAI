@@ -19,6 +19,7 @@ import { datasetMetadata } from "static/datasets/metadata";
 const getSampleDatasets = (state: StateType) => {
   const stateTask = state.task;
   const sets = [];
+  console.log(stateTask);
   for (const dataset in datasetMetadata) {
     const entry = datasetMetadata[dataset];
     const entryTask = entry.task;
@@ -26,12 +27,13 @@ const getSampleDatasets = (state: StateType) => {
       sets.unshift(dataset);
     }
   }
+  console.log(sets);
   return sets;
 };
 
 export default function SampleDatasetMenu() {
   const { state, dispatch } = useState();
-
+  console.log(state);
   function handleConfirm(dataset) {
     dispatch({
       type: Actions.SET_SAMPLE_DATASET,

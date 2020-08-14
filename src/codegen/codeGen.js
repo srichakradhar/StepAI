@@ -3,7 +3,13 @@ import * as regressionCode from "codegen/regressionCode";
 import * as knnCode from "codegen/knnCode";
 import * as sharedCode from "codegen/sharedCode";
 import * as preprocessCode from "codegen/preprocessCode";
-import { Models, DatasetCategory, Preprocessors, Tasks } from "state/StateTypes";
+import {
+  Models,
+  DatasetCategory,
+  Preprocessors,
+  Tasks,
+} from "state/StateTypes";
+import * as autoEncoderCode from "codegen/autoEncoder";
 import * as networkCode from "codegen/networkCode";
 import * as nlpCode from "codegen/nlpCode";
 import { datasetMetadata } from "static/datasets/metadata";
@@ -13,12 +19,13 @@ export const CodeGen = (state, nn_state, model_state) => {
   const sb = new StringBuilder();
 
   // task-based imports
-  if (state.task === Tasks.NATURAL_LANGUAGE) {
+  if (state.task === Tasks.TOPIC_MODELING) {
     sb.appendLine(importsCode.nlp());
   } else {
     sb.appendLine(importsCode.supervised());
   }
 
+  console.log(state.model);
   // model-specific imports
   switch (state.model) {
     case Models.KNN:
@@ -36,6 +43,9 @@ export const CodeGen = (state, nn_state, model_state) => {
     case Models.POISSON_REGRESSION:
       sb.appendLine(importsCode.poisson());
       break;
+    case Models.ENCODER:
+      sb.append(importsCode.autoencoders());
+      break;
     default:
       break;
   }
@@ -52,20 +62,27 @@ export const CodeGen = (state, nn_state, model_state) => {
   }
 
   // import sklearn datasets
-  if (state.dataset_category === DatasetCategory.SAMPLE && state.task !== Tasks.NATURAL_LANGUAGE) {
+  if (
+    state.dataset_category === DatasetCategory.SAMPLE &&
+    state.task !== Tasks.NATURAL_LANGUAGE
+  ) {
     sb.appendLine(importsCode.sklearnDatasets());
   }
 
   // defines loadData function
   if (state.dataset_category === DatasetCategory.SAMPLE) {
     if (state.task === Tasks.NATURAL_LANGUAGE) {
-      sb.appendLine(sharedCode.defineLoadDatasetNLP(datasetMetadata?.[state.sample_dataset]?.url)); 
+      sb.appendLine(
+        sharedCode.defineLoadDatasetNLP(
+          datasetMetadata?.[state.sample_dataset]?.url
+        )
+      );
       sb.appendLine();
     } else {
-      sb.appendLine(sharedCode.defineLoadDataset(state.sample_dataset)); 
+      sb.appendLine(sharedCode.defineLoadDataset(state.sample_dataset));
     }
   } else {
-    sb.appendLine(sharedCode.defineLoadUnspecified());
+    // sb.appendLine(sharedCode.defineLoadUnspecified());
   }
 
   // defines params
@@ -74,6 +91,8 @@ export const CodeGen = (state, nn_state, model_state) => {
   // loads data
   if (state.task === Tasks.NATURAL_LANGUAGE) {
     sb.appendLine(sharedCode.loadNLP());
+  } else if (state.task === Tasks.TOPIC_MODELING) {
+    sb.appendLine(sharedCode.autoEncoderDataLoad());
   } else {
     sb.appendLine(sharedCode.load());
   }
@@ -119,6 +138,9 @@ export const CodeGen = (state, nn_state, model_state) => {
     case Models.POISSON_REGRESSION:
       sb.appendLine(regressionCode.modelPoisson());
       break;
+    case Models.ENCODER:
+      sb.appendLine(autoEncoderCode.model(nn_state));
+      break;
     default:
       break;
   }
@@ -148,16 +170,18 @@ const params = (state, model_state) => {
   }
 
   if (state.task === Tasks.NATURAL_LANGUAGE && state.nlp_models.length > 0) {
-    return nlpCode.params(datasetMetadata?.[state.sample_dataset]?.column ?? 0); 
+    return nlpCode.params(datasetMetadata?.[state.sample_dataset]?.column ?? 0);
   }
 
   switch (state.model) {
     case Models.KNN:
-      return knnCode.params(model_state.knn_k ?? 5); 
+      return knnCode.params(model_state.knn_k ?? 5);
     case Models.ORDINAL_REGRESSION:
     case Models.POISSON_REGRESSION:
     case Models.LINEAR_REGRESSION:
-      return regressionCode.params(model_state.linreg_columns?.indexOf(model_state.linreg_x_name) ?? 5); 
+      return regressionCode.params(
+        model_state.linreg_columns?.indexOf(model_state.linreg_x_name) ?? 5
+      );
     default:
       break;
   }

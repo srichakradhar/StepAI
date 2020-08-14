@@ -1,7 +1,8 @@
 export const Tasks = Object.freeze({
-  CLASSIFICATION: "Classification",
-  REGRESSION: "Regression",
-  NATURAL_LANGUAGE: "Natural Language",
+  TOPIC_MODELING: "LDA Model",
+  CATEGORIES: "Classification Model",
+  REPUTATION: "Sentiment Model",
+  HEALTH_SAFETY: "Resnet Model",
 });
 
 export const Models = Object.freeze({
@@ -9,6 +10,7 @@ export const Models = Object.freeze({
   POISSON_REGRESSION: "Poisson Regression",
   ORDINAL_REGRESSION: "Ordinal Regression",
   KNN: "K-Nearest Neighbors",
+  ENCODER: "Auto Encoder",
   NEURAL_NETWORK_FF: "Deep Neural Network",
   SENTIMENT_ANALYSIS: "Sentiment Analysis",
   ENTITY_RECOGNITION: "Entity Recognition",
@@ -17,13 +19,14 @@ export const Models = Object.freeze({
 export const TaskToModelsMap = (task: TasksType) => {
   let validModels;
   switch (task) {
-    case Tasks.CLASSIFICATION:
-      validModels = (({ KNN, NEURAL_NETWORK_FF }) => ({
+    case Tasks.TOPIC_MODELING:
+      validModels = (({ KNN, NEURAL_NETWORK_FF, ENCODER }) => ({
         KNN,
         NEURAL_NETWORK_FF,
+        ENCODER,
       }))(Models);
       return validModels;
-    case Tasks.REGRESSION:
+    case Tasks.CATEGORIES:
       validModels = (({
         LINEAR_REGRESSION,
         POISSON_REGRESSION,
@@ -34,7 +37,13 @@ export const TaskToModelsMap = (task: TasksType) => {
         ORDINAL_REGRESSION,
       }))(Models);
       return validModels;
-    case Tasks.NATURAL_LANGUAGE:
+    case Tasks.REPUTATION:
+      validModels = (({ SENTIMENT_ANALYSIS, ENTITY_RECOGNITION }) => ({
+        SENTIMENT_ANALYSIS,
+        ENTITY_RECOGNITION,
+      }))(Models);
+      return validModels;
+    case Tasks.HEALTH_SAFETY:
       validModels = (({ SENTIMENT_ANALYSIS, ENTITY_RECOGNITION }) => ({
         SENTIMENT_ANALYSIS,
         ENTITY_RECOGNITION,
@@ -46,8 +55,9 @@ export const TaskToModelsMap = (task: TasksType) => {
 };
 
 export const DatasetCategory = Object.freeze({
-  CUSTOM: "Custom",
-  SAMPLE: "Sample",
+  STRUCTURED: "Structured",
+  UNSTRUCTURED: "UnStructured",
+  IMAGE: "Image",
 });
 
 export const SampleDataset = Object.freeze({
@@ -86,7 +96,11 @@ export const StepperStateOrder = [
   StepperState.VISUALIZE,
 ];
 
-export type TasksType = "Classification" | "Regression" | "Natural Language";
+export type TasksType =
+  | "LDA Model"
+  | "Classification Model"
+  | "Sentiment Model"
+  | "Resnet Model";
 
 export type ModelsType =
   | "Linear Regression"
@@ -97,7 +111,7 @@ export type ModelsType =
   | "Sentiment Analysis"
   | "Entity Recognition";
 
-export type DatasetCategoryType = "Custom" | "Sample";
+export type DatasetCategoryType = "Structured" | "UnStructured" | "Image";
 
 export type SampleDatasetType = "iris | boston";
 
